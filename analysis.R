@@ -17,12 +17,12 @@ yrs2get = ifelse(base_year < year(Sys.Date())-2 & base_year >= year(Sys.Date())-
 
 
 # import crashes and trim to temporal parameters and make spatial
-crashes_gb = get_stats19(, type = "collision") |> 
+crashes_gb = get_stats19(yrs2get, type = "collision") |> 
   filter(collision_year >= base_year & collision_year <= upper_year) |> 
   format_sf()
 
 # import vehicles and use c index from crashes
-vehicles_gb = get_stats19("5 years", type = "vehicle")|> 
+vehicles_gb = get_stats19(yrs2get, type = "vehicle")|> 
   mutate(vehicle_type = if_else(escooter_flag == "Vehicle was an e-scooter", "e-scooter", vehicle_type)) # add in escooters
 
 # e scooter collisions from vehicle description
@@ -34,7 +34,7 @@ dft_labels = c("0-11", "12-15", "16-19", "20-24", "25-29",
                "30-39", "40-49", "50-59", "60-69", "70+")
 
 # import casualties, add fatal column to match serious and slight and include e-scooters from vehicle data, add in dft age bands (different to those included in data)
-casualties_gb = get_stats19("5 years", type = "casualty")|> 
+casualties_gb = get_stats19(yrs2get, type = "casualty")|> 
   mutate(fatal_count = if_else(casualty_severity == "Fatal", 1, 0)) |>  # there is a column for serious and slight, so add one for fatal to make analysis consistent
   mutate(
     casualty_type = ifelse(
