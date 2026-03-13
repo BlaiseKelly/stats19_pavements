@@ -1,11 +1,39 @@
 # STATS19 Pedestrian Pavement analysis
 
 
-Reproducible analysis of the STATS19 data between 2020 and 2024.
+Reproducible analysis and plots of pavement pedestrian fatalities from
+STATS19 data.
 
-Pedestrian fatalities by year and summary vehicle category. Motor
-vehicle category is to summarise large, fast vehicles. It comprises of
-Cars,Buses,Goods vehicles, Motorcycles & Agricultural vehicles.
+To generate the plots below, clone repository and run “analysis.R”.
+
+The plot below shows fatalities by year and summary vehicle category.
+Motor vehicle category is to summarise large, fast vehicles. Breakdown
+in categories.
+
+| vehicle_type | short_name | vehicle_cat |
+|:---|:---|:---|
+| Motorcycle 125cc and under | Motorcycle | Motor vehicle |
+| Car | Car | Motor vehicle |
+| Goods 7.5 tonnes mgw and over | Goods vehicle | Motor vehicle |
+| Motorcycle 50cc and under | Motorcycle | Motor vehicle |
+| Bus or coach (17 or more pass seats) | Bus | Motor vehicle |
+| Van / Goods 3.5 tonnes mgw or under | Goods vehicle | Motor vehicle |
+| Taxi/Private hire car | Taxi | Motor vehicle |
+| Agricultural vehicle | Agricultural vehicle | Motor vehicle |
+| Goods over 3.5t. and under 7.5t | Goods vehicle | Motor vehicle |
+| Motorcycle over 500cc | Motorcycle | Motor vehicle |
+| Minibus (8 - 16 passenger seats) | Bus | Motor vehicle |
+| Other vehicle | Other vehicle | Motor vehicle |
+| Motorcycle over 125cc and up to 500cc | Motorcycle | Motor vehicle |
+| Goods vehicle - unknown weight | Goods vehicle | Motor vehicle |
+| Mobility scooter | Mobility scooter | Bicycle/E-scooter/Mobility Scooter |
+| Pedal cycle | Pedal cycle | Bicycle/E-scooter/Mobility Scooter |
+| e-scooter | e-scooter | Bicycle/E-scooter/Mobility Scooter |
+| Motorcycle - unknown cc | Motorcycle | Motor vehicle |
+| Electric motorcycle | Motorcycle | Motor vehicle |
+| NA | NA | NA |
+| Unknown vehicle type (self rep only) | Other vehicle | Motor vehicle |
+| Tram | NA | NA |
 
 ![](plots/pavement_fatalities.png)
 

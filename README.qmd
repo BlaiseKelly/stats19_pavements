@@ -7,9 +7,18 @@ format: gfm
   #   highlight-style: github
 editor: source
 ---
-Reproducible analysis of the STATS19 data between 2020 and 2024.
+Reproducible analysis and plots of pavement pedestrian fatalities from STATS19 data.
 
-Pedestrian fatalities by year and summary vehicle category. Motor vehicle category is to summarise large, fast vehicles. It comprises of Cars,Buses,Goods vehicles, Motorcycles & Agricultural vehicles.
+To generate the plots below, clone repository and run "analysis.R".
+
+The plot below shows fatalities by year and summary vehicle category. Motor vehicle category is to summarise large, fast vehicles. Breakdown in categories.
+
+```{r,echo=FALSE}
+
+cat_table = readRDS("vehicle_categories.RDS")
+knitr::kable(cat_table)
+
+```
 
 ![](plots/pavement_fatalities.png)
 
