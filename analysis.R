@@ -1,5 +1,6 @@
 library(sf)
 library(dplyr)
+library(lubridate)
 library(stats19)
 library(bbplot)
 library(ggplot2)
@@ -11,8 +12,12 @@ source("R/summary.R")
 base_year = 2020
 upper_year = 2024
 
+yrs2get = ifelse(base_year < year(Sys.Date())-2 & base_year >= year(Sys.Date())-6,"5 years",
+                 ifelse(base_year < year(Sys.Date())-6,"2004",base_year))
+
+
 # import crashes and trim to temporal parameters and make spatial
-crashes_gb = get_stats19("5 years", type = "collision") |> 
+crashes_gb = get_stats19(, type = "collision") |> 
   filter(collision_year >= base_year & collision_year <= upper_year) |> 
   format_sf()
 
@@ -67,7 +72,7 @@ p1 = ggplot(single_vehicle_pavement, aes(x = collision_year, y = Fatal, fill = v
            position="stack") +
   scale_fill_manual(values = c("#FAAB18", "#1380A1")) +
   labs(title="Pedestrian pavement fatalities",
-       subtitle = "Between 2020 and 2024 by vehicle category")+
+       subtitle = paste0("Between ",base_year," and ", upper_year," by vehicle category"))+
   bbc_style()
 
 dir.create("plots/")
@@ -114,7 +119,7 @@ p2 = ggplot(svp_msoa_plot, aes(area = Fatal, fill = as.factor(Fatal), label = ms
   geom_treemap_text(colour = "white")+
   scale_fill_manual(values = c("#13809f","#9a1101"))+
   labs(title="Pedestrian pavement fatalities",
-       subtitle = "MSOA regions with more than 1 death between 2020 and 2024")+
+       subtitle = paste0("MSOA regions with more than 1 death between ",base_year," and ", upper_year))+
   bbc_style()+
   theme(legend.position = "bottom")
 
@@ -130,7 +135,7 @@ p3 = ggplot(svp_la_plot, aes(area = Fatal, fill = as.factor(Fatal), label = loca
   geom_treemap_text(colour = "white")+
   scale_fill_manual(values = c("#13809f","#9a1101"))+
   labs(title="Pedestrian pavement fatalities",
-       subtitle = "Local Authorities with more than 1 death between 2020 and 2024")+
+       subtitle = paste0("Local Authorities with more than 1 death between ",base_year," and ", upper_year))+
   bbc_style()+
   theme(legend.position = "bottom")
 
@@ -152,7 +157,7 @@ p4 = ggplot(cas_pv_imd, aes(x = casualty_imd_decile, y = Fatal)) +
            position="identity",
            fill = "#9a1101")+
   labs(title="Pedestrian pavement fatalities",
-       subtitle = "Between 2020 and 2024 by IMD (index of multiple deprevation)")+
+       subtitle = paste0("Between ",base_year," and ", upper_year," by IMD (index of multiple deprevation)"))+
   bbc_style()+
   coord_flip()+
   theme(panel.grid.major.x = element_line(color="#cbcbcb", alpha - 0.1), 
@@ -173,7 +178,7 @@ p5 = ggplot(cas_pv_age, aes(x = dft_age_band, y = Fatal)) +
            position="identity",
            fill="#1380A1")+
   labs(title="Pedestrian pavement fatalities",
-       subtitle = "Between 2020 and 2024 by age")+
+       subtitle = paste0("Between ",base_year," and ", upper_year," by age"))+
   bbc_style()+
   coord_flip()+
   theme(panel.grid.major.x = element_line(color="#cbcbcb", alpha - 0.1), 
