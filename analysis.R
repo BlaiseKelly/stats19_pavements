@@ -55,9 +55,11 @@ casualties_pv_summary = casualties_gb |>
 vehicles_categorised = vehicles_gb |> 
   filter(collision_index %in% casualties_pv$collision_index) |> 
   summarise_vehicle_types("short_name") |> 
-  mutate(vehicle_cat = ifelse(is.na(short_name) | short_name == "Other vehicle","Unknown",short_name)) |> 
+  mutate(vehicle_cat = ifelse(short_name == "Other vehicle","Unknown",short_name)) |> 
   mutate(vehicle_cat = ifelse(vehicle_cat %in% c("Pedal cycle", "e-scooter","Mobility scooter"),"Bicycle/E-scooter/Mobility Scooter",vehicle_cat)) |>
   mutate(vehicle_cat = ifelse(!vehicle_cat == "Bicycle/E-scooter/Mobility Scooter" & !vehicle_cat == "Unknown","Motor vehicle",vehicle_cat)) |> 
+  mutate(vehicle_cat = ifelse(short_name == "Tram","Tram",vehicle_cat)) |> 
+  mutate(vehicle_cat = ifelse(is.na(short_name),"Unknown",vehicle_cat)) |>  
   select(collision_index,vehicle_type, short_name,vehicle_cat)
 
 # summarise vehicle category assumptions
@@ -99,15 +101,24 @@ msoa_names = read.csv("https://houseofcommonslibrary.github.io/msoanames/MSOA-Na
 msoa_geo = st_read("https://github.com/BlaiseKelly/stats19_stats/releases/download/msoa_boundaries-v1.0/msoa.gpkg") |> 
   st_transform(27700) |> 
   left_join(msoa_names, by = c("MSOA21CD" = "msoa21cd")) |> 
-  select(msoa21hclnm,localauthorityname,geom)
+  select(name = msoa21hclnm,localauthorityname,geom)
+
+# get nearest Scottish data to MSOA https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about
+# Used in the Scottish casualty data as a smaller region than Council https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/
+scottish_mid = st_read("All_Scotland_wards_4th_3117984632826710807.gpkg") |> 
+  select(name = Name,localauthorityname = Council, geom = SHAPE) |> 
+  st_transform(27700)
+
+# join with MSOA
+msoa_scot_geo = rbind(msoa_geo,scottish_mid)
 
 # single vehicle pavement collisions joined with msoa geometry and summarised
 svp_msoa = single_vehicle_pavement |> 
-  st_join(msoa_geo) |> 
+  st_join(msoa_scot_geo) |> 
   st_set_geometry(NULL) |> 
-  group_by(msoa21hclnm,localauthorityname) |> 
+  group_by(name,localauthorityname) |> 
   summarise(across(c("Fatal", "Serious", "Slight"),sum)) |> 
-  filter(!is.na(msoa21hclnm)) |> 
+  filter(!is.na(name)) |> 
   rowwise() |> 
   mutate(ksi = sum(Fatal,Serious),
          total = sum(Fatal,Serious,Slight)) 
@@ -120,7 +131,7 @@ svp_la = svp_msoa |>
 # there are a lot of places with 1, so just plot >1. Join LA to give more context
 svp_msoa_plot = svp_msoa |> 
   filter(Fatal>1) |> 
-  mutate(msoa_la = paste0(msoa21hclnm,"\n",localauthorityname))
+  mutate(msoa_la = paste0(name,"\n",localauthorityname))
 
 # treeplot
 p2 = ggplot(svp_msoa_plot, aes(area = Fatal, fill = as.factor(Fatal), label = msoa_la)) +
@@ -128,13 +139,14 @@ p2 = ggplot(svp_msoa_plot, aes(area = Fatal, fill = as.factor(Fatal), label = ms
   geom_treemap_text(colour = "white")+
   scale_fill_manual(values = c("#13809f","#9a1101"))+
   labs(title="Pedestrian pavement fatalities",
-       subtitle = paste0("MSOA regions with more than 1 death between ",base_year," and ", upper_year))+
+       subtitle = paste0("Mid-size regions with more than 1 death between ",base_year," and ", upper_year))+
   bbc_style()+
   theme(legend.position = "bottom")
 
 # write out
 finalise_plot(plot_name = p2, source_name = "Source: STATS19",save_filepath = "plots/pavement_fatalities_msoa.png")
 
+# filter only data for plotting
 svp_la_plot = svp_la |> 
   filter(Fatal>1) 
 
@@ -142,7 +154,7 @@ svp_la_plot = svp_la |>
 p3 = ggplot(svp_la_plot, aes(area = Fatal, fill = as.factor(Fatal), label = localauthorityname)) +
   geom_treemap() +
   geom_treemap_text(colour = "white")+
-  scale_fill_manual(values = c("#13809f","#9a1101"))+
+  scale_fill_manual(values = c("#13809f","#f89c15","#9a1101"))+
   labs(title="Pedestrian pavement fatalities",
        subtitle = paste0("Local Authorities with more than 1 death between ",base_year," and ", upper_year))+
   bbc_style()+
