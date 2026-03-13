@@ -36,7 +36,7 @@ in categories.
 | Electric motorcycle | Motorcycle | Motor vehicle |
 | NA | NA | Unknown |
 | Unknown vehicle type (self rep only) | Other vehicle | Unknown |
-| Tram | NA | Unknown |
+| Tram | Tram | Tram |
 
 ![](plots/pavement_fatalities.png)
 
@@ -45,12 +45,17 @@ England and Wales
 
 ![](plots/pavement_fatalities_la.png)
 
-grouped by Medium Super Output Area (MSOA)
+grouped by Medium Super Output Area (MSOA) for England and Wales and
+“Multi Member Ward” for Scotland
+https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about
+which is used in the Scottish casualty data as a smaller region than
+Council
+https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/
 
 ![](plots/pavement_fatalities_msoa.png) What was the IMD of casualties
-involved?
+involved? Data with no IMD (approx 25%) was removed.
 
 ![](plots/pavement_fatalities_imd.png) What was the age groups of
-casualties involved?
+casualties involved? One fatality was removed with not age record.
 
 ![](plots/pavement_fatalities_age.png)
