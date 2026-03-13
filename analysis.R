@@ -55,9 +55,9 @@ casualties_pv_summary = casualties_gb |>
 vehicles_categorised = vehicles_gb |> 
   filter(collision_index %in% casualties_pv$collision_index) |> 
   summarise_vehicle_types("short_name") |> 
-  mutate(vehicle_cat = ifelse(is.na(short_name) | short_name == "Other vehicle","unknown",short_name)) |> 
+  mutate(vehicle_cat = ifelse(is.na(short_name) | short_name == "Other vehicle","Unknown",short_name)) |> 
   mutate(vehicle_cat = ifelse(vehicle_cat %in% c("Pedal cycle", "e-scooter","Mobility scooter"),"Bicycle/E-scooter/Mobility Scooter",vehicle_cat)) |>
-  mutate(vehicle_cat = ifelse(!vehicle_cat == "Bicycle/E-scooter/Mobility Scooter" & !vehicle_cat == "unknown","Motor vehicle",vehicle_cat)) |> 
+  mutate(vehicle_cat = ifelse(!vehicle_cat == "Bicycle/E-scooter/Mobility Scooter" & !vehicle_cat == "Unknown","Motor vehicle",vehicle_cat)) |> 
   select(collision_index,vehicle_type, short_name,vehicle_cat)
 
 # summarise vehicle category assumptions
