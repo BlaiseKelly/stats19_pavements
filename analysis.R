@@ -157,7 +157,16 @@ finalise_plot(plot_name = p3, source_name = "Source: STATS19",save_filepath = "p
 cas_pv_imd = casualties_gb |> 
   filter(pedestrian_location == "On footway or verge") |> 
   group_by(casualty_imd_decile) |> 
-  summarise(Fatal = sum(fatal_count)) 
+  summarise(Fatal = sum(fatal_count)) |> 
+  filter(!is.na(casualty_imd_decile))
+
+cas_pv_imd_missing = casualties_gb |> 
+  filter(pedestrian_location == "On footway or verge") |> 
+  group_by(casualty_imd_decile) |> 
+  summarise(Fatal = sum(fatal_count)) |> 
+  filter(is.na(casualty_imd_decile))
+
+pc_missing = cas_pv_imd_missing$Fatal/sum(cas_pv_imd$Fatal)
 
 #Make plot
 p4 = ggplot(cas_pv_imd, aes(x = casualty_imd_decile, y = Fatal)) +
@@ -178,7 +187,14 @@ finalise_plot(plot_name = p4, source_name = "Source: STATS19",height_pixels = 80
 cas_pv_age = casualties_gb |> 
   filter(pedestrian_location == "On footway or verge") |> 
   group_by(dft_age_band) |> 
-  summarise(Fatal = sum(fatal_count)) 
+  summarise(Fatal = sum(fatal_count)) |> 
+  filter(!is.na(dft_age_band))
+
+cas_pv_age_missing = casualties_gb |> 
+  filter(pedestrian_location == "On footway or verge") |> 
+  group_by(dft_age_band) |> 
+  summarise(Fatal = sum(fatal_count)) |> 
+  filter(is.na(dft_age_band))
 
 #Make plot
 p5 = ggplot(cas_pv_age, aes(x = dft_age_band, y = Fatal)) +
