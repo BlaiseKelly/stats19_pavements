@@ -56,8 +56,17 @@ vehicles_categorised = vehicles_gb |>
   filter(collision_index %in% casualties_pv$collision_index) |> 
   summarise_vehicle_types("short_name") |> 
   mutate(vehicle_cat = ifelse(is.na(short_name) | short_name == "Other vehicle","unknown",short_name)) |> 
-  mutate(vehicle_cat = ifelse(short_name %in% c("Pedal cycle", "e-scooter","Mobility scooter")|short_name == "unknown","Bicycle/E-scooter/Mobility Scooter","Motor vehicle")) |> 
+  mutate(vehicle_cat = ifelse(vehicle_cat %in% c("Pedal cycle", "e-scooter","Mobility scooter"),"Bicycle/E-scooter/Mobility Scooter",vehicle_cat)) |>
+  mutate(vehicle_cat = ifelse(!vehicle_cat == "Bicycle/E-scooter/Mobility Scooter" & !vehicle_cat == "unknown","Motor vehicle",vehicle_cat)) |> 
   select(collision_index,vehicle_type, short_name,vehicle_cat)
+
+# summarise vehicle category assumptions
+vehicle_cat_table = vehicles_categorised |>
+  select(-collision_index) |> 
+  distinct(vehicle_type, .keep_all = TRUE)
+
+# write out so README can show
+saveRDS(vehicle_cat_table,"vehicle_categories.RDS")
 
 # only single vehicle collisions can be confident of the vehicle that hit the pedestrian
 single_vehicle_pavement <- crashes_gb |> 
@@ -70,7 +79,7 @@ single_vehicle_pavement <- crashes_gb |>
 p1 = ggplot(single_vehicle_pavement, aes(x = collision_year, y = Fatal, fill = vehicle_cat)) +
   geom_bar(stat="identity", 
            position="stack") +
-  scale_fill_manual(values = c("#FAAB18", "#1380A1")) +
+  scale_fill_manual(values = c("#FAAB18", "#1380A1","grey")) +
   labs(title="Pedestrian pavement fatalities",
        subtitle = paste0("Between ",base_year," and ", upper_year," by vehicle category"))+
   bbc_style()
