@@ -11,6 +11,8 @@ Reproducible analysis and plots of pavement pedestrian fatalities from STATS19 d
 
 To generate the plots below, clone repository and run "analysis.R".
 
+Plots were suggested to the BBC and formatted using the BBC style package [bbplot](https://github.com/bbc/bbplot).
+
 The plot below shows fatalities by year and summary vehicle category. Motor vehicle category is to summarise large, fast vehicles. Breakdown in categories.
 
 ```{r,echo=FALSE}

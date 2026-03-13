@@ -6,6 +6,9 @@ STATS19 data.
 
 To generate the plots below, clone repository and run “analysis.R”.
 
+Plots were suggested to the BBC and formatted using the BBC style
+package [bbplot](https://github.com/bbc/bbplot).
+
 The plot below shows fatalities by year and summary vehicle category.
 Motor vehicle category is to summarise large, fast vehicles. Breakdown
 in categories.
@@ -23,7 +26,7 @@ in categories.
 | Goods over 3.5t. and under 7.5t | Goods vehicle | Motor vehicle |
 | Motorcycle over 500cc | Motorcycle | Motor vehicle |
 | Minibus (8 - 16 passenger seats) | Bus | Motor vehicle |
-| Other vehicle | Other vehicle | Motor vehicle |
+| Other vehicle | Other vehicle | Unknown |
 | Motorcycle over 125cc and up to 500cc | Motorcycle | Motor vehicle |
 | Goods vehicle - unknown weight | Goods vehicle | Motor vehicle |
 | Mobility scooter | Mobility scooter | Bicycle/E-scooter/Mobility Scooter |
@@ -31,9 +34,9 @@ in categories.
 | e-scooter | e-scooter | Bicycle/E-scooter/Mobility Scooter |
 | Motorcycle - unknown cc | Motorcycle | Motor vehicle |
 | Electric motorcycle | Motorcycle | Motor vehicle |
-| NA | NA | NA |
-| Unknown vehicle type (self rep only) | Other vehicle | Motor vehicle |
-| Tram | NA | NA |
+| NA | NA | Unknown |
+| Unknown vehicle type (self rep only) | Other vehicle | Unknown |
+| Tram | NA | Unknown |
 
 ![](plots/pavement_fatalities.png)
 
