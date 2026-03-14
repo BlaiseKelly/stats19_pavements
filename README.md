@@ -10,8 +10,7 @@ Plots were suggested to the BBC and formatted using the BBC style
 package [bbplot](https://github.com/bbc/bbplot).
 
 The plot below shows fatalities by year and summary vehicle category.
-Motor vehicle category is to summarise large, fast vehicles. Breakdown
-in categories.
+Motor vehicle category is to summarise large, fast vehicles, shown in table below.
 
 | vehicle_type | short_name | vehicle_cat |
 |:---|:---|:---|
@@ -40,12 +39,11 @@ in categories.
 
 ![](plots/pavement_fatalities.png)
 
-Where did they happen, grouped by Local Authority region (LA) for
-England and Wales
+Where did they happen, grouped by Local Authority region (LA) for Great Britain 
 
 ![](plots/pavement_fatalities_la.png)
 
-grouped by Medium Super Output Area (MSOA) for England and Wales and
+Grouped by Medium Super Output Area (MSOA) for England and Wales and
 “Multi Member Ward” for Scotland
 https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about
 which is used in the Scottish casualty data as a smaller region than
