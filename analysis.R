@@ -47,7 +47,7 @@ casualties_gb = get_stats19(yrs2get, type = "casualty")|>
                                    breaks = dft_breaks, labels = dft_labels))
 
 # casuatlies catagorised as on footway or verge https://assets.publishing.service.gov.uk/media/6925a35433d088f6d5da2cf0/STATS20_2024_specification.pdf
-casualties_pv_summary = casualties_gb |> 
+casualties_pv = casualties_gb |> 
   filter(pedestrian_location == "On footway or verge") |> 
   summarise_casualties_per_collision() # summarise casualties to one line per collision
 
@@ -112,6 +112,13 @@ scottish_mid = st_read("All_Scotland_wards_4th_3117984632826710807.gpkg") |>
 # join with MSOA
 msoa_scot_geo = rbind(msoa_geo,scottish_mid)
 
+# only single vehicle collisions can be confident of the vehicle that hit the pedestrian
+single_vehicle_pavement <- crashes_gb |> 
+  filter(number_of_vehicles == 1, collision_year >= base_year & collision_year <= upper_year) |> 
+  inner_join(vehicles_categorised) |> 
+  inner_join(casualties_pv) |> 
+  filter(Fatal > 0)
+
 # single vehicle pavement collisions joined with msoa geometry and summarised
 svp_msoa = single_vehicle_pavement |> 
   st_join(msoa_scot_geo) |> 
@@ -138,13 +145,13 @@ p2 = ggplot(svp_msoa_plot, aes(area = Fatal, fill = as.factor(Fatal), label = ms
   geom_treemap() +
   geom_treemap_text(colour = "white")+
   scale_fill_manual(values = c("#13809f","#9a1101"))+
-  labs(title="Pedestrian pavement fatalities",
+  labs(title="Pedestrian pavement fatalities: single vehicle",
        subtitle = paste0("Mid-size regions with more than 1 death between ",base_year," and ", upper_year))+
   bbc_style()+
   theme(legend.position = "bottom")
 
 # write out
-finalise_plot(plot_name = p2, source_name = "Source: STATS19",save_filepath = "plots/pavement_fatalities_msoa.png")
+finalise_plot(plot_name = p2, source_name = "Source: STATS19",save_filepath = "plots/sv_pavement_fatalities_msoa.png")
 
 # filter only data for plotting
 svp_la_plot = svp_la |> 
@@ -155,13 +162,71 @@ p3 = ggplot(svp_la_plot, aes(area = Fatal, fill = as.factor(Fatal), label = loca
   geom_treemap() +
   geom_treemap_text(colour = "white")+
   scale_fill_manual(values = c("#13809f","#f89c15","#9a1101"))+
-  labs(title="Pedestrian pavement fatalities",
+  labs(title="Pedestrian pavement fatalities: single vehicle",
        subtitle = paste0("Local Authorities with more than 1 death between ",base_year," and ", upper_year))+
   bbc_style()+
   theme(legend.position = "bottom")
 
 # write out
-finalise_plot(plot_name = p3, source_name = "Source: STATS19",save_filepath = "plots/pavement_fatalities_la.png")
+finalise_plot(plot_name = p3, source_name = "Source: STATS19",save_filepath = "plots/sv_pavement_fatalities_la.png")
+
+# ALL vehicle pedestrian pavement fatalities
+# only single vehicle collisions can be confident of the vehicle that hit the pedestrian
+all_vehicle_pavement <- crashes_gb |> 
+  filter(collision_year >= base_year & collision_year <= upper_year) |> 
+  inner_join(casualties_pv) |> 
+  filter(Fatal > 0)
+
+# single vehicle pavement collisions joined with msoa geometry and summarised
+avp_msoa = all_vehicle_pavement |> 
+  st_join(msoa_scot_geo) |> 
+  st_set_geometry(NULL) |> 
+  group_by(name,localauthorityname) |> 
+  summarise(across(c("Fatal", "Serious", "Slight"),sum)) |> 
+  filter(!is.na(name)) |> 
+  rowwise() |> 
+  mutate(ksi = sum(Fatal,Serious),
+         total = sum(Fatal,Serious,Slight)) 
+
+# same for local authorities
+avp_la = avp_msoa |> 
+  group_by(localauthorityname) |> 
+  summarise(across(c("Fatal", "Serious", "Slight"),sum))
+
+# there are a lot of places with 1, so just plot >1. Join LA to give more context
+avp_msoa_plot = avp_msoa |> 
+  filter(Fatal>1) |> 
+  mutate(msoa_la = paste0(name,"\n",localauthorityname))
+
+# treeplot
+p4 = ggplot(avp_msoa_plot, aes(area = Fatal, fill = as.factor(Fatal), label = msoa_la)) +
+  geom_treemap() +
+  geom_treemap_text(colour = "white")+
+  scale_fill_manual(values = c("#13809f","#9a1101"))+
+  labs(title="Pedestrian pavement fatalities: all vehicles",
+       subtitle = paste0("Mid-size regions with more than 1 death between ",base_year," and ", upper_year))+
+  bbc_style()+
+  theme(legend.position = "bottom")
+
+# write out
+finalise_plot(plot_name = p4, source_name = "Source: STATS19",save_filepath = "plots/av_pavement_fatalities_msoa.png")
+
+# filter only data for plotting
+avp_la_plot = avp_la |> 
+  filter(Fatal>1) 
+
+# treeplot
+p5 = ggplot(avp_la_plot, aes(area = Fatal, fill = as.factor(Fatal), label = localauthorityname)) +
+  geom_treemap() +
+  geom_treemap_text(colour = "white")+
+  scale_fill_manual(values = c("#13809f","#f89c15","#37601e", "#ad3025","#510d09"))+
+  labs(title="Pedestrian pavement fatalities: all vehicles",
+       subtitle = paste0("Local Authorities with more than 1 death between ",base_year," and ", upper_year))+
+  bbc_style()+
+  theme(legend.position = "bottom")
+
+# write out
+finalise_plot(plot_name = p5, source_name = "Source: STATS19",save_filepath = "plots/av_pavement_fatalities_la.png")
 
 # some other plots on casualty data
 
@@ -181,7 +246,7 @@ cas_pv_imd_missing = casualties_gb |>
 pc_missing = cas_pv_imd_missing$Fatal/sum(cas_pv_imd$Fatal)
 
 #Make plot
-p4 = ggplot(cas_pv_imd, aes(x = casualty_imd_decile, y = Fatal)) +
+p6 = ggplot(cas_pv_imd, aes(x = casualty_imd_decile, y = Fatal)) +
   geom_bar(stat="identity",
            show.legend = FALSE,
            position="identity",
@@ -193,7 +258,7 @@ p4 = ggplot(cas_pv_imd, aes(x = casualty_imd_decile, y = Fatal)) +
   theme(panel.grid.major.x = element_line(color="#cbcbcb", alpha - 0.1), 
         panel.grid.major.y=element_blank())
 
-finalise_plot(plot_name = p4, source_name = "Source: STATS19",height_pixels = 800,width_pixels = 700, save_filepath = "plots/pavement_fatalities_imd.png")
+finalise_plot(plot_name = p6, source_name = "Source: STATS19",height_pixels = 800,width_pixels = 700, save_filepath = "plots/av_pavement_fatalities_imd.png")
 
 # group by casualty age 
 cas_pv_age = casualties_gb |> 
@@ -209,7 +274,7 @@ cas_pv_age_missing = casualties_gb |>
   filter(is.na(dft_age_band))
 
 #Make plot
-p5 = ggplot(cas_pv_age, aes(x = dft_age_band, y = Fatal)) +
+p7 = ggplot(cas_pv_age, aes(x = dft_age_band, y = Fatal)) +
   geom_bar(stat="identity",
            show.legend = FALSE,
            position="identity",
@@ -221,4 +286,4 @@ p5 = ggplot(cas_pv_age, aes(x = dft_age_band, y = Fatal)) +
   theme(panel.grid.major.x = element_line(color="#cbcbcb", alpha - 0.1), 
         panel.grid.major.y=element_blank())
 
-finalise_plot(plot_name = p5, source_name = "Source: STATS19",height_pixels = 600, save_filepath = "plots/pavement_fatalities_age.png")
+finalise_plot(plot_name = p7, source_name = "Source: STATS19",height_pixels = 600, save_filepath = "plots/av_pavement_fatalities_age.png")

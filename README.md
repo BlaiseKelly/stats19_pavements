@@ -2,7 +2,7 @@
 
 
 Reproducible analysis and plots of pavement pedestrian fatalities from
-STATS19 data.
+STATS19 data covering Great Britain.
 
 To generate the plots below, clone repository and run “analysis.R”.
 
@@ -10,7 +10,8 @@ Plots were suggested to the BBC and formatted using the BBC style
 package [bbplot](https://github.com/bbc/bbplot).
 
 The plot below shows fatalities by year and summary vehicle category.
-Motor vehicle category is to summarise large, fast vehicles, shown in table below.
+Motor vehicle category is to summarise large, fast vehicles. Breakdown
+shown in table below.
 
 | vehicle_type | short_name | vehicle_cat |
 |:---|:---|:---|
@@ -39,19 +40,38 @@ Motor vehicle category is to summarise large, fast vehicles, shown in table belo
 
 ![](plots/pavement_fatalities.png)
 
-Where did they happen, grouped by Local Authority region (LA) for Great Britain 
+Where did they happen, single vehicle pavement collisions grouped by
+Local Authority region (LA) for Great Britain.
 
-![](plots/pavement_fatalities_la.png)
+![](plots/sv_pavement_fatalities_la.png)
 
-Grouped by Medium Super Output Area (MSOA) for England and Wales and
-“Multi Member Ward” for Scotland
+Single vehicle collisions grouped by Medium Super Output Area (MSOA) for
+England and Wales and “Multi Member Ward” for Scotland
 https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about
 which is used in the Scottish casualty data as a smaller region than
 Council
-https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/
+https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/.
 
-![](plots/pavement_fatalities_msoa.png) What was the IMD of casualties
-involved? Data with no IMD (approx 25%) was removed.
+![](plots/sv_pavement_fatalities_msoa.png)
+
+Single vehicle collisions are used as it is clear the vehicle
+respnsible, however there are more collisions where more vehicles were
+involved. The plots below are for all vehicles.
+
+All vehicle pavement collisions grouped by Local Authority region (LA)
+for Great Britain.
+
+![](plots/av_pavement_fatalities_la.png)
+
+All vehicle collisions grouped by Medium Super Output Area (MSOA) for
+England and Wales and “Multi Member Ward” for Scotland
+https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about
+which is used in the Scottish casualty data as a smaller region than
+Council
+https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/.
+
+![](plots/av_pavement_fatalities_msoa.png) What was the IMD of
+casualties involved? Data with no IMD (approx 25%) was removed.
 
 ![](plots/pavement_fatalities_imd.png) What was the age groups of
 casualties involved? One fatality was removed with not age record.

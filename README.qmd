@@ -7,13 +7,13 @@ format: gfm
   #   highlight-style: github
 editor: source
 ---
-Reproducible analysis and plots of pavement pedestrian fatalities from STATS19 data.
+Reproducible analysis and plots of pavement pedestrian fatalities from STATS19 data covering Great Britain.
 
 To generate the plots below, clone repository and run "analysis.R".
 
 Plots were suggested to the BBC and formatted using the BBC style package [bbplot](https://github.com/bbc/bbplot).
 
-The plot below shows fatalities by year and summary vehicle category. Motor vehicle category is to summarise large, fast vehicles. Breakdown in categories.
+The plot below shows fatalities by year and summary vehicle category. Motor vehicle category is to summarise large, fast vehicles. Breakdown shown in table below.
 
 ```{r,echo=FALSE}
 
@@ -24,13 +24,23 @@ knitr::kable(cat_table)
 
 ![](plots/pavement_fatalities.png)
 
-Where did they happen, grouped by Local Authority region (LA) for England and Wales
+Where did they happen, single vehicle pavement collisions grouped by Local Authority region (LA) for Great Britain.
 
-![](plots/pavement_fatalities_la.png)
+![](plots/sv_pavement_fatalities_la.png)
 
-grouped by Medium Super Output Area (MSOA) for England and Wales and "Multi Member Ward" for Scotland https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about which is used in the Scottish casualty data as a smaller region than Council https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/
+Single vehicle collisions grouped by Medium Super Output Area (MSOA) for England and Wales and "Multi Member Ward" for Scotland https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about which is used in the Scottish casualty data as a smaller region than Council https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/.
 
-![](plots/pavement_fatalities_msoa.png)
+![](plots/sv_pavement_fatalities_msoa.png)
+
+Single vehicle collisions are used as it is clear the vehicle respnsible, however there are more collisions where more vehicles were involved. The plots below are for all vehicles.
+
+All vehicle pavement collisions grouped by Local Authority region (LA) for Great Britain.
+
+![](plots/av_pavement_fatalities_la.png)
+
+All vehicle collisions grouped by Medium Super Output Area (MSOA) for England and Wales and "Multi Member Ward" for Scotland https://hub.arcgis.com/datasets/stirling-council::open-data-scottish-local-authority-multi-member-ward-boundaries/about which is used in the Scottish casualty data as a smaller region than Council https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data/.
+
+![](plots/av_pavement_fatalities_msoa.png)
 What was the IMD of casualties involved? Data with no IMD (approx 25%) was removed.
 
 ![](plots/pavement_fatalities_imd.png)
