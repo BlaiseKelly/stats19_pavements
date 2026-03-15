@@ -74,7 +74,7 @@ saveRDS(vehicle_cat_table,"vehicle_categories.RDS")
 single_vehicle_pavement <- crashes_gb |> 
   filter(number_of_vehicles == 1 & collision_year >= base_year & collision_year <= upper_year) |> 
   inner_join(vehicles_categorised) |> 
-  inner_join(casualties_pv_summary) |> 
+  inner_join(casualties_pv) |> 
   filter(Fatal > 0)
 
 #Make plot
@@ -89,7 +89,7 @@ p1 = ggplot(single_vehicle_pavement, aes(x = collision_year, y = Fatal, fill = v
 dir.create("plots/")
 
 # write out
-finalise_plot(plot_name = p1, source_name = "Source: STATS19",save_filepath = "plots/pavement_fatalities.png")
+finalise_plot(plot_name = p1, source_name = "Source: STATS19",save_filepath = "plots/sv_pavement_fatalities.png")
 
 # Where did they happen?
 

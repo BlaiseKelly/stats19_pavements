@@ -22,7 +22,7 @@ knitr::kable(cat_table)
 
 ```
 
-![](plots/pavement_fatalities.png)
+![](plots/sv_pavement_fatalities.png)
 
 Where did they happen, single vehicle pavement collisions grouped by Local Authority region (LA) for Great Britain.
 

@@ -38,7 +38,7 @@ shown in table below.
 | Unknown vehicle type (self rep only) | Other vehicle | Unknown |
 | Tram | Tram | Tram |
 
-![](plots/pavement_fatalities.png)
+![](plots/sv_pavement_fatalities.png)
 
 Where did they happen, single vehicle pavement collisions grouped by
 Local Authority region (LA) for Great Britain.
