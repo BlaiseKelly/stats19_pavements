@@ -73,7 +73,7 @@ https://www.scotland.police.uk/about-us/how-we-do-it/road-traffic-collision-data
 ![](plots/av_pavement_fatalities_msoa.png) What was the IMD of
 casualties involved? Data with no IMD (approx 25%) was removed.
 
-![](plots/pavement_fatalities_imd.png) What was the age groups of
+![](plots/av_pavement_fatalities_imd.png) What was the age groups of
 casualties involved? One fatality was removed with not age record.
 
-![](plots/pavement_fatalities_age.png)
+![](plots/av_pavement_fatalities_age.png)
