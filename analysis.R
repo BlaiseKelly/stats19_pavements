@@ -251,7 +251,7 @@ p6 = ggplot(cas_pv_imd, aes(x = casualty_imd_decile, y = Fatal)) +
            show.legend = FALSE,
            position="identity",
            fill = "#9a1101")+
-  labs(title="Pedestrian pavement fatalities",
+  labs(title="Pedestrian pavement fatalities: all vehicles",
        subtitle = paste0("Between ",base_year," and ", upper_year," by IMD (index of multiple deprevation)"))+
   bbc_style()+
   coord_flip()+
@@ -279,7 +279,7 @@ p7 = ggplot(cas_pv_age, aes(x = dft_age_band, y = Fatal)) +
            show.legend = FALSE,
            position="identity",
            fill="#1380A1")+
-  labs(title="Pedestrian pavement fatalities",
+  labs(title="Pedestrian pavement fatalities: all vehicles",
        subtitle = paste0("Between ",base_year," and ", upper_year," by age"))+
   bbc_style()+
   coord_flip()+
